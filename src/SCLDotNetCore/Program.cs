@@ -64,6 +64,9 @@ namespace SCLDotNetCore
             var cancelToken = new CancellationToken();
 
             var typeName = GetType().GetTypeInfo().Assembly.DefinedTypes.FirstOrDefault(info => info.Name == commandName)?.FullName;
+
+            if (typeName == null) throw new ArgumentException($"Command {commandName} not found", nameof(commandName));
+
             var command = ActivatorUtilities.CreateInstance(_provider, Type.GetType(typeName), _tableClient) as ICommand;
 
             command?.RunAsync(cancelToken).Wait(cancelToken);
@@ -73,9 +76,14 @@ namespace SCLDotNetCore
         private static void Main(string[] args)
         {
             var program = new Program();
-            program.Run("ListTable");
-//            program.Run("DumpPerf");
-            program.Run("ListTable");
+
+            if (args.Length > 0)
+            {
+                foreach (var s in args)
+                {
+                    program.Run(s);
+                }
+            }
         }
     }
 }
