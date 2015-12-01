@@ -3,7 +3,7 @@
 using System;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace SCLDotNetCore
+namespace SclXplatDnx
 {
 
 

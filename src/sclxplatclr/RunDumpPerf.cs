@@ -6,22 +6,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace SCLDotNetCore
+namespace SclXplatDnx
 {
-    public class DumpPerf:ICommand
+    public partial class Program
     {
         private static DateTime _baseDate = DateTime.Parse("2015-10-12T03:00:00");
         private DateTime _fromDate = _baseDate.AddHours(-2);
         private DateTime _toDate = _baseDate.AddHours(1);
 
-        private readonly CloudTableClient _tableClient;
-
-        public DumpPerf(CloudTableClient tableClient)
-        {
-            _tableClient = tableClient;
-        }
-
-        public async Task RunAsync(CancellationToken cancellationToken)
+        /// <summary>
+        /// Single Thread Loop
+        /// </summary>
+        private async Task RunDumpPerf(CancellationToken cancellationToken)
         {
             var sw = Stopwatch.StartNew();
             var min = _fromDate.ToUniversalTime().Ticks;
@@ -42,14 +38,14 @@ namespace SCLDotNetCore
                 var segment = await table.ExecuteQuerySegmentedAsync(query, token, null, null, cancellationToken);
                 token = segment.ContinuationToken;
                 result.AddRange(segment.Results);
-                // Console.Write($"{segment.Results.Count}.");
+               // Console.Write($"{segment.Results.Count}.");
 
             } while (token != null);
             Console.WriteLine();
 
             sw.Stop();
             Console.WriteLine("Count:{0}, Min: {1}, Max: {2}, Elapsed: {3:F2} sec",
-                result.Count, result.Min(e => e.PartitionKey), result.Max(e => e.PartitionKey), (sw.ElapsedMilliseconds / 1000.0));
+                result.Count, result.Min(e => e.PartitionKey), result.Max(e => e.PartitionKey), (sw.ElapsedMilliseconds/1000.0));
         }
     }
 }

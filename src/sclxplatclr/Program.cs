@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Framework.DependencyInjection;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.RetryPolicies;
 using Microsoft.WindowsAzure.Storage.Table;
-using Microsoft.Framework.DependencyInjection;
 
-
-namespace SCLDotNetCore
+namespace SclXplatDnx
 {
     // https://github.com/dotnet/coreclr
 
